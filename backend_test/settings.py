@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
 
 from .envtools import getenv
 from celery.schedules import crontab
@@ -18,6 +19,8 @@ from celery.schedules import crontab
 # import sentry_sdk
 # from sentry_sdk.integrations.django import DjangoIntegration
 
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -247,8 +250,9 @@ LOGGING = {
 
 LOGIN_REDIRECT_URL = '/'
 
-VERIFICATION_TOKEN = 'qFqmDIjTnzY42LbZEK9ZiGq2'
-OAUTH_ACCESS_TOKEN = 'xoxp-1861870561652-1868330726545-1855971626563-9f1e704b7e4e4aaaed00580fd1956ce5'
-BOT_USER_ACCESS_TOKEN = 'xoxb-1861870561652-1840937154807-9FIJZw1jidvpitezMf32r0Y9'
-SLACK_CLIENT_ID = "1861870561652.1852618896933"
-SLACK_CLIENT_SECRET = "0711f64d8cc4c77bad88cef3f4046272"
+#VERIFICATION_TOKEN = env('VERIFICATION_TOKEN')
+#OAUTH_ACCESS_TOKEN = env('OAUTH_ACCESS_TOKEN')
+BOT_USER_ACCESS_TOKEN = env('BOT_USER_ACCESS_TOKEN')
+#SLACK_CLIENT_ID = env('SLACK_CLIENT_ID')
+#SLACK_CLIENT_SECRET = env('SLACK_CLIENT_SECRET')
+
