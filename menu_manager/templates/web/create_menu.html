@@ -1,0 +1,32 @@
+{% extends 'web/base.html' %}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% block content %}
+
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+<div class="container-fluid flex-grow-1 container-p-y">
+    <div class="card mb-4">
+      <h6 class="card-header">
+        Crear Menu
+      </h6>
+      <div class="card-body">
+          <form  method="POST" action="" id="taskForm">
+              {% csrf_token %}
+              {% bootstrap_form form  layout='horizontal' %}
+              {% buttons %}
+                  <button type="submit" class="btn btn-primary btn-large">Guardar</button>
+              {% endbuttons %}
+          </form>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

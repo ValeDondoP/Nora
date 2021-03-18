@@ -1,0 +1,65 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>Menu de Nora</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/vendor/fonts/fontawesome.css' %}">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <style>
+            h1 {text-align: center;}
+            p {text-align: center;}
+            div {text-align: center;}
+        </style>
+        <style>
+            @import url(https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.3/css/mdb.min.css);
+            .hm-gradient {
+                background-image: linear-gradient(to top, #f3e7e9 0%, #e3eeff 99%, #e3eeff 100%);
+            }
+            .darken-grey-text {
+                color: #2E2E2E;
+            }
+            .navbar .dropdown-menu a:hover {
+                color: #616161 !important;
+            }
+            .darken-grey-text {
+                color: #2E2E2E;
+            }
+            </style>
+    </head>
+    <nav class="navbar navbar-expand-lg navbar-dark teal mb-4">
+        <a class="navbar-brand" href="{% url 'menu_manager:index' %}">Menu de Nora</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    {% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'menu_manager:option_list' %}">Lista de Almuerzos <span class="sr-only">(current)</span></a>
+                    {% endif %}
+                </li>
+                <li class="nav-item">
+                    {% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'menu_manager:menu_list' %}">Lista de Menus</a>
+                    {% endif %}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"></a>
+                </li>
+
+        </div>
+    </nav>
+
+    <body>
+        {% block content %}
+        {% endblock %}
+        {% block extrajs %}
+        {% endblock %}
+
+    </body>
+</html>

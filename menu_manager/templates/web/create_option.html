@@ -1,0 +1,117 @@
+{% extends 'web/base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+
+{% block  content %}
+
+<!-- Profile
+============================================= -->
+<div class="container-fluid flex-grow-1 container-p-y">
+
+    <div class="card mb-4">
+      <h6 class="card-header">
+        Crear Almuerzos
+      </h6>
+      <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {% for form in formset %}
+          <div class="form-group form-row row">
+            <label class="col-form-label col-sm-2 text-sm-right">Almuerzo</label>
+            <div class="col-sm-8 input-group">
+                {{ form.id }}
+                {% bootstrap_field form.meal show_label=False %}
+            </div>
+            <div class="input-group-append">
+                <button type="button"  class="btn btn-success add-form-row">Añadir +</button>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="form-group row">
+            <div class="col-sm-10 ml-sm-auto">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </div>
+        </form>
+        <div class="col-sm-10 ml-sm-auto">
+          Ya tienes Opciones Creadas? Puedes ir <a href="{% url 'menu_manager:create_menu'%}"> directo a crear Menu</a>
+      </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock%}
+{% block extrajs %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type='text/javascript'>
+$( document ).ready(function() {
+    function updateElementIndex(el, prefix, ndx) {
+        var id_regex = new RegExp('(' + prefix + '-\\d+)');
+        var replacement = prefix + '-' + ndx;
+        if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+        if (el.id) el.id = el.id.replace(id_regex, replacement);
+        if (el.name) el.name = el.name.replace(id_regex, replacement);
+    }
+    function cloneMore(selector, prefix) {
+        var newElement = $(selector).clone(true);
+        var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+        newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-', '-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        newElement.find('label').each(function() {
+            var forValue = $(this).attr('for');
+            if (forValue) {
+              forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
+              $(this).attr({'for': forValue});
+            }
+        });
+        total++;
+        $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+        var conditionRow = $('.form-row:not(:last)');
+        conditionRow.find('.btn.add-form-row')
+        .removeClass('btn-success').addClass('btn-danger')
+        .removeClass('add-form-row').addClass('remove-form-row')
+        .html('<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>');
+        return false;
+    }
+    function deleteForm(prefix, btn) {
+        var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+        if (total > 1){
+            btn.closest('.form-row').remove();
+            var forms = $('.form-row');
+            $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+            for (var i=0, formCount=forms.length; i<formCount; i++) {
+                $(forms.get(i)).find(':input').each(function() {
+                    updateElementIndex(this, prefix, i);
+                });
+            }
+        }
+        return false;
+    }
+
+    $(document).on('click', '.add-form-row', function(e){
+        e.preventDefault();
+        cloneMore('.form-row:last', 'form');
+        return false;
+    });
+    $(document).on('click', '.remove-form-row', function(e){
+        e.preventDefault();
+        deleteForm('form', $(this));
+        return false;
+    });
+});
+    </script>
+{% endblock %}

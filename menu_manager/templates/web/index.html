@@ -1,0 +1,42 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block extrahead %}
+<style>
+html, body {
+  height: 100%;
+  margin: 0px;
+}
+
+.container, .row {
+  height: 100%;
+}
+</style>
+{% endblock %}
+{% block content %}
+<!-- Background image -->
+<div class="bg-image"
+style="background-image: url('{% static 'images/food.jpg'  %}');
+      height: 100vh">
+      <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-auto">
+            <div class="card border-primary">
+              <div class="card-header">Bienvenida/o a Menu de Nora</div>
+              <div class="body">
+                  <p>Menu de Nora es un sistema donde puedes crear menus
+                    y estos se envían como mensaje el día indicado a todos los empleados de tu empresa.</p>
+                    <p>Para crear un Menú primero debes crear opciones para tu almuerzo</p>
+              </div>
+                <div class="card-footer">
+                  <a type="button" href="{% url 'menu_manager:create_option' %}" class="btn btn-primary">Crear opción de  almuerzo</a>
+                </div>
+            </div>
+            <div class="card border-primary">
+                <div class="body">
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock %}

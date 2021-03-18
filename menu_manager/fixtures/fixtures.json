@@ -1,0 +1,9 @@
+[
+    { "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "username": "nora",
+            "password": "pbkdf2_sha256$180000$O34imibhnJCz$zXnG/ntYXbaxLrM6M0e+MiylDUjZzXnnFxDgcXmj34o="
+        }
+    }
+]

@@ -1,0 +1,37 @@
+{% extends 'web/base.html' %}
+{% block extrahead %}
+<style>
+html, body {
+  height: 100%;
+  margin: 0px;
+}
+
+.container, .row {
+  height: 100%;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container search-results-section">
+
+  <div class="card">
+      <div class="card-header with-elements">
+
+          <h1 class="card-header-title mr-2">Lista de Menus Agregados</h1>
+          <div class="card-header-elements ml-md-auto">
+          </div>
+        </div>
+      <div class="card-body">
+          {% for option in object_list %}
+              <p>{{option.meal}}</p>
+              {% empty %}
+              <p> Aún no hay almuerzos agregados </p>
+          {% endfor %}
+      </div>
+    </div>
+    <a class ="btn btn-primary btn-large" href='{% url "menu_manager:create_option" %}'>Agregar Nuevo Almuerzo</a>
+    <a class ="btn btn-primary btn-large" href='{% url "menu_manager:create_menu" %}'>Agregar Menu</a>
+  </div>
+
+
+{% endblock %}

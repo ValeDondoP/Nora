@@ -1,0 +1,43 @@
+{% extends 'web/base.html' %}
+{% block content %}
+
+<div class="container search-results-section">
+
+            <div class="card">
+                <div class="card-header with-elements">
+
+                    <h1 class="card-header-title mr-2">Lista de Menu de fecha {{ menu.start_date }}</h1>
+                    <div class="card-header-elements ml-md-auto">
+                    </div>
+                  </div>
+                <div class="card-body">
+                    <div class="table-responsive ">
+                        <table id="entriesTable" class="table card-table css-serial table-bordered">
+                            <thead class="thead-light">
+                                <tr> <th>#</th>
+                                    <th class="text-align-right">Nombre de Empleado</th>
+                                    <th class="text-align-right">Opción</th>
+                                    <th class="text-align-right">Comentario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for answer in object_list %}
+                                <tr> <td></td>
+                                    <td class="text-nowrap text-align-right">{{ answer.employee_name }}</td>
+                                    <td class="text-nowrap text-align-right">
+                                        {{ answer.menu_option.meal }}
+                                </td>
+                                    <td class="text-nowrap text-align-right">{{ answer.comentaries }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+</div>
+
+
+
+{% endblock %}

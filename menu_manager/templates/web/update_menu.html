@@ -1,0 +1,25 @@
+{% extends 'web/base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+<div class="container">
+    <div class="card">
+      <div class="card-header with-elements">
+        <h1>Actualiza tu Menu</h1>
+      </div>
+      <div class="card-body">
+        <form  method="POST" action="" id="taskForm">
+            {% csrf_token %}
+            {% bootstrap_form form  layout='horizontal' %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary btn-large">Guardar</button>
+            {% endbuttons %}
+        </form>
+    </div>
+    </div>
+</div>
+
+{% endblock %}
