@@ -37,7 +37,7 @@ class OptionListView(
         LoginRequiredMixin,
         ListView,
     ):
-    model = MenuOptions
+    model = Options
     template_name = 'web/option_list.html'
 
 
@@ -45,17 +45,17 @@ class OptionMenuCreateView(
         LoginRequiredMixin,
         TemplateView
     ):
-    model = MenuOptions
+    model = Options
     template_name = 'web/create_option.html'
 
     def get(self, *args, **kwargs):
         # Create an instance of the formset
-        formset = OptionMenuFormSet(queryset=MenuOptions.objects.none())
+        formset = OptionFormSet(queryset=Options.objects.none())
         return self.render_to_response({'formset': formset})
 
     def post(self, *args, **kwargs):
 
-        formset = OptionMenuFormSet(data=self.request.POST)
+        formset = OptionFormSet(data=self.request.POST)
 
         # Check if submitted forms are valid
         if formset.is_valid():
@@ -116,13 +116,13 @@ class MenuListView(
 class TodayMenuView(
     UpdateView,
 ):
-    model = EmployeesMenuAnswer
+    model = Answer
     template_name = 'web/today_menu.html'
-    form_class = MenuAnswerForm
+    form_class = AnswerForm
 
     def get_object(self, *args, **kwargs):
         answer_pk = self.kwargs.get('answer_pk')
-        answer = EmployeesMenuAnswer.objects.get(pk=answer_pk)
+        answer = Answer.objects.get(pk=answer_pk)
         return answer
 
     def get_success_url(self):
@@ -139,7 +139,7 @@ class AnswerListView(
     LoginRequiredMixin,
     ListView,
 ):
-    model = EmployeesMenuAnswer
+    model = Answer
     template_name = "web/answer_list.html"
 
     def get_context_data(self, **kwargs):

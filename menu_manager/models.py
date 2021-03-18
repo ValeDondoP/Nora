@@ -16,7 +16,7 @@ class UUIDPrimaryKey(models.Model):
         abstract = True
 
 
-class MenuOptions(UUIDPrimaryKey):
+class Options(UUIDPrimaryKey): # change to options
     meal = models.CharField(
         max_length=64,
     )
@@ -31,15 +31,42 @@ class  Menu(UUIDPrimaryKey):
     start_date = models.DateField(
         'start date',
         db_index=True,
+        unique=True,
     )
-
     options = models.ManyToManyField(
-        MenuOptions,
+        Options,
         related_name='options',
     )
 
 
-class  EmployeesMenuAnswer(UUIDPrimaryKey):
+class Employee(UUIDPrimaryKey):
+    user_id = models.CharField(
+        max_length=80,
+        blank=True,
+        null=True,
+        )
+    name = models.CharField(
+        'name',
+        max_length=80
+    )
+    email = models.EmailField(
+        'e-mail',
+        blank=True,
+        null=True,
+    )
+    is_active = models.BooleanField(
+        default=True,
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'employee'
+        verbose_name_plural = 'employees'
+
+
+class  Answer(UUIDPrimaryKey):
     menu = models.ForeignKey(
         Menu,
         on_delete=models.CASCADE,
@@ -47,17 +74,19 @@ class  EmployeesMenuAnswer(UUIDPrimaryKey):
     )
 
     menu_option = models.ForeignKey(
-        MenuOptions,
+        Options,
         on_delete=models.CASCADE,
         related_name='answers',
         blank=True,
         null=True,
     )
 
-    employee_name = models.CharField(
-        max_length=64,
+    employee = models.ForeignKey(
+        Employee,
+        on_delete=models.CASCADE,
+        related_name='answers',
         blank=True,
-        null=True
+        null=True,
     )
 
     comentaries = models.CharField(

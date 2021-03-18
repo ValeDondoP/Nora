@@ -11,29 +11,29 @@ from django_select2.forms import Select2Widget, Select2MultipleWidget
 from bootstrap_datepicker_plus import DatePickerInput
 
 from .models import (
-    MenuOptions,
+    Options,
     Menu,
-    EmployeesMenuAnswer,
+    Answer,
 
 )
 
-class OptionMenuForm(ModelForm):
+class OptionForm(ModelForm):
     class Meta:
-        model = MenuOptions
+        model = Options
 
         fields = (
             'meal',
         )
 
-OptionMenuFormSet = modelformset_factory(
-    MenuOptions, fields=("meal",), extra=1
+OptionFormSet = modelformset_factory(
+    Options, fields=("meal",), extra=1
 )
 
 class MenuForm(ModelForm):
     options =  forms.ModelMultipleChoiceField(
         required=True,
         widget=Select2MultipleWidget(),
-        queryset=MenuOptions.objects.all(),
+        queryset=Options.objects.all(),
     )
     class Meta:
         model = Menu
@@ -49,8 +49,6 @@ class MenuForm(ModelForm):
         # Save option's menu
         menu.options.set(self.cleaned_data['options'])
         menu.save()
-        # Create EmployeeAnswerMenu instance
-        answer, created = EmployeesMenuAnswer.objects.get_or_create(menu=menu)
 
         return menu
 
@@ -59,7 +57,7 @@ class MenuFormUpdate(ModelForm):
     options =  forms.ModelMultipleChoiceField(
         required=True,
         widget=Select2MultipleWidget(),
-        queryset=MenuOptions.objects.all(),
+        queryset=Options.objects.all(),
     )
     class Meta:
         model = Menu
@@ -83,22 +81,25 @@ class MenuFormUpdate(ModelForm):
         return menu
 
 
-class MenuAnswerForm(forms.ModelForm):
+class AnswerForm(forms.ModelForm):
 
     class Meta:
-        model = EmployeesMenuAnswer
+        model = Answer
         fields = (
             'menu',
             'menu_option',
-            'employee_name',
+            'employee',
             'comentaries',
         )
 
     def __init__(self, *args, **kwargs):
-        super(MenuAnswerForm,self).__init__(*args, **kwargs)
+        super(AnswerForm,self).__init__(*args, **kwargs)
         answer=self.instance
         self.fields['menu'].initial = answer.menu
         self.fields['menu'].widget = forms.HiddenInput()
+
+        self.fields['employee'].initial = answer.employee
+        self.fields['employee'].widget = forms.HiddenInput()
         self.fields['menu_option'] = forms.ModelChoiceField(
                                             queryset=answer.menu.options.all(),
                                       )

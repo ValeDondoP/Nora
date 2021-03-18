@@ -12,20 +12,35 @@ from django.utils.dateparse import parse_datetime
 
 from dateutil.relativedelta import relativedelta
 
+from menu_manager.models import *
+
 
 client  = slack.WebClient(token=settings.BOT_USER_ACCESS_TOKEN)
 
 def get_list_of_users():
+    # TODO : PAGINATION
     users = client.api_call("users.list")
     if users.get('ok'):
         return users['members']
 
-def send_message_to_users(response_msg):
+
+def save_users_info(today_menu):
     users = get_list_of_users()
+
     if users:
         for user in users:
-            if user['is_bot'] == False:
-                client.chat_postMessage(
-                    channel=user['id'],
+            if 'email' in user['profile']:
+                employee, created = Employee.objects.update_or_create(user_id=user['id'],
+                                        name=user['profile']['real_name'],
+                                        email=user['profile']['email'],
+                                        is_active=True,
+                                        )
+                Answer.objects.create(menu=today_menu,employee=employee)
+
+
+
+def send_message_to_user(response_msg,user_id):
+    client.chat_postMessage(
+                    channel=user_id,
                     text=response_msg
                 )
