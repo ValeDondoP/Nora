@@ -7,15 +7,24 @@ from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-#from  menu_manager.tasks import *
+
+
+
 from django.conf import settings
-#import requests
-import json
-from django.http import HttpResponse
-from .forms import *
-from .models import *
-from slack_bot.tasks import *
-from django.contrib.sites.models import Site
+
+
+from .forms import (
+    OptionFormSet,
+    MenuForm,
+    MenuFormUpdate,
+    AnswerForm
+)
+from .models import (
+    Menu,
+    Options,
+    Answer,
+    Employee
+)
 
 # Create your views here.
 
@@ -25,13 +34,6 @@ class IndexView(
     ):
     template_name = 'web/index.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-       # a=send_message.delay()
-       # print(a.ready())
-        #current_site = Site.objects.get_current()
-        #print(current_site)
-        return context
 
 class OptionListView(
         LoginRequiredMixin,
@@ -112,6 +114,10 @@ class MenuListView(
     model = Menu
     template_name = "web/menu_list.html"
 
+def get_queryset(self):
+        qs = super(MenuListView, self).get_queryset().order_by('start_date')
+        return qs
+
 
 class TodayMenuView(
     UpdateView,
@@ -120,6 +126,17 @@ class TodayMenuView(
     template_name = 'web/today_menu.html'
     form_class = AnswerForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        hour = timezone.localtime(timezone.now()).hour
+        minutes = hour.minute
+        # menu available until 11
+        if hour < 11 :
+            context['is_active'] = True
+        elif hour == 11 and minute == 0:
+            context['is_active'] = True
+        return context
+
     def get_object(self, *args, **kwargs):
         answer_pk = self.kwargs.get('answer_pk')
         answer = Answer.objects.get(pk=answer_pk)
@@ -127,7 +144,7 @@ class TodayMenuView(
 
     def get_success_url(self):
         return reverse_lazy(
-            'menu_manager:menu_list'
+            'menu_manager:done'
         )
 
     def form_valid(self, form):
@@ -142,8 +159,17 @@ class AnswerListView(
     model = Answer
     template_name = "web/answer_list.html"
 
+    def get_queryset(self):
+        menu_pk = self.kwargs['menu_pk']
+        qs = super(AnswerListView, self).get_queryset().filter(menu=Menu.objects.get(pk=menu_pk))
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         menu_pk =  self.kwargs.get('menu_pk')
         context['menu'] = Menu.objects.get(pk=menu_pk)
         return context
+
+
+class AnswerDone(TemplateView):
+    template_name = 'web/menu_answer_done.html'

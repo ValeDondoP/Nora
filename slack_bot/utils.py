@@ -12,7 +12,12 @@ from django.utils.dateparse import parse_datetime
 
 from dateutil.relativedelta import relativedelta
 
-from menu_manager.models import *
+from menu_manager.models import (
+    Menu,
+    Options,
+    Answer,
+    Employee
+)
 
 
 client  = slack.WebClient(token=settings.BOT_USER_ACCESS_TOKEN)
@@ -40,7 +45,11 @@ def save_users_info(today_menu):
 
 
 def send_message_to_user(response_msg,user_id):
-    client.chat_postMessage(
-                    channel=user_id,
-                    text=response_msg
-                )
+    try:
+        client.chat_postMessage(
+                        channel=user_id,
+                        text=response_msg
+                    )
+    except ValueError as e:
+        print(" error en "+ str(type(e))
+

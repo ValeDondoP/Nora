@@ -5,7 +5,7 @@
 
 {% bootstrap_javascript jquery='full' %}
 {{ form.media }}
-
+{% if is_active %}
 <h1>¡Escoge tu almuerzo!</h1>
 <br>
 <div class="container">
@@ -19,5 +19,9 @@
         </form>
     </div>
 </div>
+{% else %}
+<h1>Lo siento! el menu expiró :( </h1>
+{% endif %}
+
 
 {% endblock %}

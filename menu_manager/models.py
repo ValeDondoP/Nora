@@ -37,6 +37,9 @@ class  Menu(UUIDPrimaryKey):
         Options,
         related_name='options',
     )
+    is_sent = models.BooleanField(
+        default=False,
+    )
 
 
 class Employee(UUIDPrimaryKey):

@@ -40,4 +40,9 @@ urlpatterns = [
         views.AnswerListView.as_view(),
         name='results'
     ),
+    path(
+        'menu/answer_done',
+        views.AnswerDone.as_view(),
+        name='done'
+    ),
 ]

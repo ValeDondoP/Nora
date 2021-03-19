@@ -14,7 +14,7 @@
                     <div class="table-responsive ">
                         <table id="entriesTable" class="table card-table css-serial table-bordered">
                             <thead class="thead-light">
-                                <tr> <th>#</th>
+                                <tr>
                                     <th class="text-align-right">Fecha de Envío</th>
                                     <th class="text-align-right">Detalle</th>
                                     <th class="text-align-right">Estado</th>
@@ -24,16 +24,28 @@
                             </thead>
                             <tbody>
                                 {% for menu in object_list %}
-                                <tr> <td></td>
+                                <tr>
                                     <td class="text-nowrap text-align-right">{{ menu.start_date}}</td>
                                     <td class="text-nowrap text-align-right">
                                         {% for option in menu.options.all %}
-                                            Opcion: {{ option.meal }} <br/>
+                                            Opción: {{ option.meal }} <br/>
                                         {% endfor %}
                                 </td>
-                                    <td class="text-nowrap text-align-right">Cancelado</td>
-                                    <td><a href="{% url 'menu_manager:update_menu' menu.pk  %}"><i class="fas fa-edit"></i></a></td>
-                                    <td><a href="{% url 'menu_manager:results' menu.pk  %}">resultado</a></td>
+                                    {% if menu.is_sent %}
+                                        <td class="text-nowrap text-align-right">Enviado</td>
+                                    {% else %}
+                                        <td class="text-nowrap text-align-right">No Enviado</td>
+                                    {% endif %}
+                                    {% if not menu.is_sent%}
+                                        <td><a href="{% url 'menu_manager:update_menu' menu.pk  %}"><i class="fas fa-edit"></i></a></td>
+                                    {% else %}
+                                        <td><a href="#"><i class="fas fa-edit"></i></a></td>
+                                    {% endif %}
+                                    {% if menu.is_sent %}
+                                        <td><a class="btn btn-primary" href="{% url 'menu_manager:results' menu.pk  %}">Resultado</a></td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
                                 </tr>
                                 {% endfor %}
                             </tbody>

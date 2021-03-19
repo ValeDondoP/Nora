@@ -17,7 +17,6 @@ class CelerySettings:
     # Time and date settings
     # https://docs.celeryproject.org/en/v4.3.0/userguide/configuration.html#time-and-date-settings
     CELERY_ENABLE_UTC = True
-    CELERY_TIMEZONE = "UTC"
     # Task settings
     # https://docs.celeryproject.org/en/v4.3.0/userguide/configuration.html#task-settings
     CELERY_TASK_SERIALIZER = "json"
@@ -65,7 +64,7 @@ class CelerySettings:
     CELERYD_POOL_RESTARTS = True
     CELERY_IMPORTS = ('slack_bot.tasks', )
     CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"
-    CELERY_TIMEZONE = 'America/Santiago'# TODO: set ctl hour
+    CELERY_TIMEZONE = 'America/Santiago'#
 
     CELERYBEAT_SCHEDULE = {
     'daily-reminder-menu': {
