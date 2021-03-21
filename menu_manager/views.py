@@ -28,7 +28,6 @@ from .models import (
     Employee
 )
 
-# Create your views here.
 
 class IndexView(
         LoginRequiredMixin,
@@ -223,3 +222,4 @@ class AnswerDone(TemplateView):
     Display a it's donde message to employee
     """
     template_name = 'web/menu_answer_done.html'
+
