@@ -67,9 +67,9 @@ class CelerySettings:
     CELERY_TIMEZONE = 'America/Santiago'#
 
     CELERYBEAT_SCHEDULE = {
-    'daily-reminder-menus': {
+    'daily-reminder-menu': {
         'task': 'slack_bot.tasks.send_message_to_users',
-        'schedule': timedelta(seconds=5)
+        'schedule': crontab(minute=30,hour=8)
     },
 }
 
