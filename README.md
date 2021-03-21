@@ -20,6 +20,8 @@
 ### Cargue data inicial
 * `./manage.py loaddata fixtures.json`
 * `./manage.py loaddata fixtures_menu.json`
+### Login
+* Para loguearte a la plataforma debes usar username=nora y password=cornershoptest
 ### Slack bot
 Debe tener una app en un Workspace en Slack y un bot con los permisos:
 * chat:write

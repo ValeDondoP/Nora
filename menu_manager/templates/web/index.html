@@ -23,9 +23,9 @@ style="background-image: url('{% static 'images/food.jpg'  %}');
             <div class="card border-primary">
               <div class="card-header">Bienvenida/o a Menu de Nora</div>
               <div class="body">
-                  <p>Menu de Nora es un sistema donde puedes crear menus
+                  <p class="card-text"> Menu de Nora es un sistema donde puedes crear menus
                     y estos se envían como mensaje el día indicado a todos los empleados de tu empresa.</p>
-                    <p>Para crear un Menú primero debes crear opciones para tu almuerzo</p>
+                    <p> Para crear un Menú primero debes crear opciones para tu almuerzo</p>
               </div>
                 <div class="card-footer">
                   <a type="button" href="{% url 'menu_manager:create_option' %}" class="btn btn-primary">Crear opción de  almuerzo</a>

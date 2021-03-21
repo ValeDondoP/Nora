@@ -11,37 +11,44 @@ from django_select2.forms import Select2Widget, Select2MultipleWidget
 from bootstrap_datepicker_plus import DatePickerInput
 
 from .models import (
-    Options,
+    Option,
     Menu,
     Answer,
 
 )
 
-class OptionForm(ModelForm):
-    class Meta:
-        model = Options
 
-        fields = (
-            'meal',
-        )
-
+"""Form used to create a multiples options menu"""
 OptionFormSet = modelformset_factory(
-    Options, fields=("meal",), extra=1
+    Option, fields=("meal",), extra=1
 )
 
 class MenuForm(ModelForm):
+    """Form used to create a menu to send a certain date"""
+
     options =  forms.ModelMultipleChoiceField(
         required=True,
         widget=Select2MultipleWidget(),
-        queryset=Options.objects.all(),
+        queryset=Option.objects.all(),
+        label='Opciones',
     )
     class Meta:
         model = Menu
         fields = ['start_date',]
 
+
+        labels = {
+            'start_date': 'Fecha de Envío',
+        }
+
         widgets = {
-            'start_date': DatePickerInput(format='%Y-%m-%d'),
-            }
+            'start_date': DatePickerInput(
+                format='%Y-%m-%d',
+                options={
+                    'minDate': (datetime.datetime.today()).strftime('%Y-%m-%d 00:00:00'),
+                }
+            )
+        }
 
     def save(self, *args, **kwargs):
         menu = super().save(*args, **kwargs)
@@ -54,10 +61,12 @@ class MenuForm(ModelForm):
 
 
 class MenuFormUpdate(ModelForm):
+    """Form used to update a menu """
+
     options =  forms.ModelMultipleChoiceField(
         required=True,
         widget=Select2MultipleWidget(),
-        queryset=Options.objects.all(),
+        queryset=Option.objects.all(),
     )
     class Meta:
         model = Menu
@@ -82,7 +91,7 @@ class MenuFormUpdate(ModelForm):
 
 
 class AnswerForm(forms.ModelForm):
-
+    """Form used save the option that the user select"""
     class Meta:
         model = Answer
         fields = (
@@ -94,7 +103,8 @@ class AnswerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AnswerForm,self).__init__(*args, **kwargs)
-        answer=self.instance
+        answer = self.instance
+        # menu and employee already set
         self.fields['menu'].initial = answer.menu
         self.fields['menu'].widget = forms.HiddenInput()
 

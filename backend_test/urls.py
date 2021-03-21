@@ -25,6 +25,5 @@ urlpatterns = [
     path("healthz", healthz, name="healthz"),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('menu_manager.urls')),
-    path('', include('slack_bot.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

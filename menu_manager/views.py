@@ -6,6 +6,7 @@ from django.views.generic import ListView
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -22,7 +23,7 @@ from .forms import (
 )
 from .models import (
     Menu,
-    Options,
+    Option,
     Answer,
     Employee
 )
@@ -43,7 +44,7 @@ class OptionListView(
         LoginRequiredMixin,
         ListView,
     ):
-    model = Options
+    model = Option
     template_name = 'web/option_list.html'
 
 
@@ -54,12 +55,12 @@ class OptionMenuCreateView(
     """Options Creation View
     Display a formset to create multiple options meals
     """
-    model = Options
+    model = Option
     template_name = 'web/create_option.html'
 
     def get(self, *args, **kwargs):
         # Create an instance of the formset
-        formset = OptionFormSet(queryset=Options.objects.none())
+        formset = OptionFormSet(queryset=Option.objects.none())
         return self.render_to_response({'formset': formset})
 
     def post(self, *args, **kwargs):
@@ -98,6 +99,9 @@ class MenuUpdateView(
         LoginRequiredMixin,
         UpdateView
     ):
+    """Menu Update View
+    Display a forms to update an existing  menu with start_date and options to choose
+    """
     model = Menu
     template_name = 'web/update_menu.html'
     form_class = MenuFormUpdate
@@ -117,10 +121,39 @@ class MenuUpdateView(
         return super(MenuUpdateView, self).form_valid(form)
 
 
+class MenuDeleteView(
+        LoginRequiredMixin,
+        UpdateView,
+    ):
+    """Menu Delete View
+    Delete an existing menu
+    """
+    model = Menu
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'menu_manager:menu_list'
+        )
+
+    def get_object(self, *args, **kwargs):
+        menu_pk = self.kwargs.get('menu_pk')
+        menu = Menu.objects.get(id=menu_pk)
+        return menu
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object() # get object
+        success_url = self.get_success_url()
+        self.object.delete()
+        return HttpResponseRedirect(success_url) #redirect
+
+
 class MenuListView(
         LoginRequiredMixin,
         ListView,
     ):
+    """
+    Display a list of all menus that the user creates
+    """
     model = Menu
     template_name = "web/menu_list.html"
     ordering = ['-start_date']
@@ -129,6 +162,9 @@ class MenuListView(
 class TodayMenuView(
         UpdateView,
     ):
+    """
+    Display a form with todays menu options, it is not shown after 11 ctl
+    """
     model = Answer
     template_name = 'web/today_menu.html'
     form_class = AnswerForm
@@ -164,6 +200,9 @@ class AnswerListView(
         LoginRequiredMixin,
         ListView,
     ):
+    """
+    Display a list of all answers from employees to specific menu
+    """
     model = Answer
     template_name = "web/answer_list.html"
 
@@ -180,4 +219,7 @@ class AnswerListView(
 
 
 class AnswerDone(TemplateView):
+    """
+    Display a it's donde message to employee
+    """
     template_name = 'web/menu_answer_done.html'

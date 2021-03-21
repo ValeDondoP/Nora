@@ -10,9 +10,14 @@ from menu_manager.models import (
 class TestViews(TestCase):
 
     def test_save_users_info(self):
+        """ Test function save_users_info """
         today = timezone.now()
         today_menu = Menu.objects.create(start_date=today)
 
         save_users_info(today_menu)
 
         self.assertIsNotNone(Employee.objects.first())
+        number_of_employees = Employee.objects.all().count()
+        # if I call the function again it should not change the employees in datatabase
+        save_users_info(today_menu)
+        self.assertEquals(number_of_employees,Employee.objects.all().count())

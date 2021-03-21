@@ -37,12 +37,14 @@
                                         <td class="text-nowrap text-align-right">No Enviado</td>
                                     {% endif %}
                                     {% if not menu.is_sent%}
-                                        <td><a href="{% url 'menu_manager:update_menu' menu.pk  %}"><i class="fas fa-edit"></i></a></td>
+                                        <td><a href="{% url 'menu_manager:update_menu' menu.pk  %} " class="btn btn-success btn-sm"><i class="fas fa-edit"></i></a>
+                                        <a href="{% url 'menu_manager:delete_menu' menu.pk %}"class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+                                        </td>
                                     {% else %}
-                                        <td><a href="#"><i class="fas fa-edit"></i></a></td>
+                                        <td></td>
                                     {% endif %}
                                     {% if menu.is_sent %}
-                                        <td><a class="btn btn-primary" href="{% url 'menu_manager:results' menu.pk  %}">Resultado</a></td>
+                                        <td><a class="btn btn-outline-success" href="{% url 'menu_manager:results' menu.pk  %}">Resultado</a></td>
                                     {% else %}
                                         <td></td>
                                     {% endif %}

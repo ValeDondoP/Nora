@@ -1,11 +1,11 @@
 [
-    { "model": "menu_manager.options",
+    { "model": "menu_manager.option",
         "pk": "2028d8a4-8919-11eb-8dcd-0242ac130003",
         "fields": {
             "meal": "tallarines con salsa roja, ensalada y postre"
         }
     },
-    { "model": "menu_manager.options",
+    { "model": "menu_manager.option",
         "pk": "36592510-891f-11eb-8dcd-0242ac130003",
         "fields": {
             "meal": "Cazuela de Pollo, ensalada y postre"

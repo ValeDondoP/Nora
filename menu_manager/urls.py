@@ -26,6 +26,11 @@ urlpatterns = [
         name='update_menu'
     ),
     path(
+        'delete/<uuid:menu_pk>',
+        views.MenuDeleteView.as_view(),
+        name='delete_menu'
+    ),
+    path(
         'create_menu/menu_list',
         views.MenuListView.as_view(),
         name='menu_list'

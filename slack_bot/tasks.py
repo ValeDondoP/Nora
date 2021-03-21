@@ -1,8 +1,8 @@
+from celery import  shared_task
+from datetime import datetime, timedelta
 from celery.schedules import crontab
 from celery.decorators import periodic_task
 from celery.utils.log import get_task_logger
-from celery import  shared_task
-from datetime import datetime, timedelta
 from backend_test.celery import app
 from django.utils import timezone
 from slack_bot.utils import  save_users_info, send_message_to_user
@@ -19,24 +19,16 @@ logger = get_task_logger(__name__)
 
 
 @app.task
-def try_celery():
-    logger.info("Trying out Celery")
-    print("jajajaja")
-
-@shared_task
-def test_add(x, y):
-    print ('Ejecución finalizada')
-    return x + y
-
-@app.task
 def send_message_to_users():
+    """ Send message to users if there is a today menu """
+
     current_site = Site.objects.get_current()
     # Get today's Menu
     today = timezone.localtime(timezone.now())
     today_menu = Menu.objects.filter(start_date=today.date()).first() # usar get
 
     if today_menu:
-        save_users_info(today_menu)
+        save_users_info(today_menu) # update user's info
         employees = Employee.objects.all()
 
     # Construct url's menu if there is a menu today

@@ -5,10 +5,9 @@ from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
 from django.utils import timezone
 
-from menu_manager.views import *
 from menu_manager.models import (
     Menu,
-    Options,
+    Option,
     Answer,
     Employee
 )
@@ -31,7 +30,7 @@ class TestViews(TestCase):
         """test to check if can create menu in MenuCreateView"""
 
         url = self.menu_url
-        option = Options.objects.create(meal="arroz con pescado")
+        option = Option.objects.create(meal="arroz con pescado")
         response = self.client.post(url,{
             'start_date': '2021-03-12',
             'options' : [option.pk],
@@ -64,6 +63,13 @@ class TestViews(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertEquals(menu.start_date,start_date)
 
+    def test_delte_menu_view(self):
+        """ test to check if can delete menu in MenuDeleteView"""
+
+        response = self.client.get(reverse('menu_manager:delete_menu',args=[self.menu.pk]))
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(0,Menu.objects.all().count()) # there was one menu in database
+
     def test_option_create_view(self):
         """ test if can create option in OptionMenuCreateView """
 
@@ -79,7 +85,7 @@ class TestViews(TestCase):
               'form-1-meal': 'sushi',
         })
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(Options.objects.all().count(),4) # 2 initial options in fixtures_menu.json
+        self.assertEquals(Option.objects.all().count(),4) # 2 initial options in fixtures_menu.json
 
     def test_today_menu_context(self):
         """ test to check is_active key in context_data  in TodayMenuView """
@@ -110,5 +116,4 @@ class TestViews(TestCase):
             Answer.objects.filter( menu=self.menu),
             transform= lambda x:x
         )
-
 

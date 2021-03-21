@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from django.utils import timezone
-# Create your models here.
+
 
 
 class UUIDPrimaryKey(models.Model):
@@ -16,7 +16,7 @@ class UUIDPrimaryKey(models.Model):
         abstract = True
 
 
-class Options(UUIDPrimaryKey): # change to options
+class Option(UUIDPrimaryKey):
     meal = models.CharField(
         max_length=64,
     )
@@ -34,7 +34,7 @@ class  Menu(UUIDPrimaryKey):
         unique=True,
     )
     options = models.ManyToManyField(
-        Options,
+        Option,
         related_name='options',
     )
     is_sent = models.BooleanField(
@@ -77,7 +77,7 @@ class  Answer(UUIDPrimaryKey):
     )
 
     menu_option = models.ForeignKey(
-        Options,
+        Option,
         on_delete=models.CASCADE,
         related_name='answers',
         blank=True,
