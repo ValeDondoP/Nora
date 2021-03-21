@@ -23,7 +23,6 @@ from menu_manager.models import (
 client  = slack.WebClient(token=settings.BOT_USER_ACCESS_TOKEN)
 
 def get_list_of_users():
-    # TODO : PAGINATION
     users = client.api_call("users.list")
     if users.get('ok'):
         return users['members']
@@ -40,16 +39,13 @@ def save_users_info(today_menu):
                                         email=user['profile']['email'],
                                         is_active=True,
                                         )
-                Answer.objects.create(menu=today_menu,employee=employee)
+                Answer.objects.get_or_create(menu=today_menu,employee=employee)
 
 
 
 def send_message_to_user(response_msg,user_id):
-    try:
-        client.chat_postMessage(
+    client.chat_postMessage(
                         channel=user_id,
                         text=response_msg
                     )
-    except ValueError as e:
-        print(" error en "+ str(type(e))
 

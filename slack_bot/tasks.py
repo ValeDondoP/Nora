@@ -11,6 +11,7 @@ from django.contrib.sites.models import Site
 from menu_manager.models import (
    Menu,
    Answer,
+   Employee
 
 )
 
@@ -42,7 +43,7 @@ def send_message_to_users():
         for employee in employees:
             # Send message to active users
             if employee.is_active:
-                answer = Answer.objects.get(menu=today_menu,employee=employee)
+                answer = Answer.objects.filter(menu=today_menu,employee=employee).first()
                 url = f'https://{current_site.domain}/menu/{answer.pk}'
                 message = ":wave:, Hola  en este link podrás encontrar el menu de hoy " + url
                 send_message_to_user(message,employee.user_id)

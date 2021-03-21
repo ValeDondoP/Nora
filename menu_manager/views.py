@@ -5,6 +5,7 @@ from django.views.generic import ListView
 
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
+from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -32,6 +33,9 @@ class IndexView(
         LoginRequiredMixin,
         TemplateView,
     ):
+    """
+    Displays the home page of NoraApp
+    """
     template_name = 'web/index.html'
 
 
@@ -47,6 +51,9 @@ class OptionMenuCreateView(
         LoginRequiredMixin,
         TemplateView
     ):
+    """Options Creation View
+    Display a formset to create multiple options meals
+    """
     model = Options
     template_name = 'web/create_option.html'
 
@@ -70,7 +77,10 @@ class OptionMenuCreateView(
 class MenuCreateView(
         LoginRequiredMixin,
         CreateView,
-):
+    ):
+     """Menu Creation View
+    Display a forms to create a menu with start_date and options to choose
+    """
     template_name = 'web/create_menu.html'
     form_class = MenuForm
 
@@ -85,9 +95,9 @@ class MenuCreateView(
 
 
 class MenuUpdateView(
-    LoginRequiredMixin,
-    UpdateView
-):
+        LoginRequiredMixin,
+        UpdateView
+    ):
     model = Menu
     template_name = 'web/update_menu.html'
     form_class = MenuFormUpdate
@@ -108,20 +118,17 @@ class MenuUpdateView(
 
 
 class MenuListView(
-    LoginRequiredMixin,
-    ListView,
-):
+        LoginRequiredMixin,
+        ListView,
+    ):
     model = Menu
     template_name = "web/menu_list.html"
-
-def get_queryset(self):
-        qs = super(MenuListView, self).get_queryset().order_by('start_date')
-        return qs
+    ordering = ['-start_date']
 
 
 class TodayMenuView(
-    UpdateView,
-):
+        UpdateView,
+    ):
     model = Answer
     template_name = 'web/today_menu.html'
     form_class = AnswerForm
@@ -129,9 +136,9 @@ class TodayMenuView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         hour = timezone.localtime(timezone.now()).hour
-        minutes = hour.minute
+        minutes = timezone.localtime(timezone.now()).minute
         # menu available until 11
-        if hour < 11 :
+        if hour < 11  and hour >= 8:
             context['is_active'] = True
         elif hour == 11 and minute == 0:
             context['is_active'] = True
@@ -153,9 +160,9 @@ class TodayMenuView(
 
 
 class AnswerListView(
-    LoginRequiredMixin,
-    ListView,
-):
+        LoginRequiredMixin,
+        ListView,
+    ):
     model = Answer
     template_name = "web/answer_list.html"
 

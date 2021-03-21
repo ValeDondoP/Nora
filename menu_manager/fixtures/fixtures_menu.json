@@ -1,0 +1,39 @@
+[
+    { "model": "menu_manager.options",
+        "pk": "2028d8a4-8919-11eb-8dcd-0242ac130003",
+        "fields": {
+            "meal": "tallarines con salsa roja, ensalada y postre"
+        }
+    },
+    { "model": "menu_manager.options",
+        "pk": "36592510-891f-11eb-8dcd-0242ac130003",
+        "fields": {
+            "meal": "Cazuela de Pollo, ensalada y postre"
+        }
+    },
+    { "model": "menu_manager.menu",
+        "pk": "cf7f926c-8918-11eb-8dcd-0242ac130003",
+        "fields": {
+            "start_date": "2021-03-11",
+            "options": ["2028d8a4-8919-11eb-8dcd-0242ac130003"],
+            "is_sent": "True"
+        }
+    },
+    { "model": "menu_manager.employee",
+        "pk": "858f3abc-8919-11eb-8dcd-0242ac130003",
+        "fields": {
+            "name": "Laura",
+            "email": "laura@test.com",
+            "is_active": "False"
+        }
+    },
+    { "model": "menu_manager.answer",
+        "pk": "4df5256c-8919-11eb-8dcd-0242ac130003",
+        "fields": {
+            "menu": "cf7f926c-8918-11eb-8dcd-0242ac130003",
+            "menu_option": "2028d8a4-8919-11eb-8dcd-0242ac130003",
+            "employee": "858f3abc-8919-11eb-8dcd-0242ac130003",
+            "comentaries":"ensalada sin cebolla"
+        }
+    }
+]

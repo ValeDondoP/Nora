@@ -17,3 +17,6 @@
 
 * Local: http://127.0.0.1:8000
 
+### Load initial data
+* ./manage.py loaddata fixtures.json
+* ./manage.py loaddata fixtures_menu.json
