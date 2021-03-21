@@ -44,3 +44,7 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(minute=30,hour=8)
     },
 ```
+Para ejecutar celery:
+```
+celery -A backend_test worker --beat --scheduler django --loglevel=info
+```
