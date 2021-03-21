@@ -5,5 +5,13 @@
             "username": "nora",
             "password": "pbkdf2_sha256$180000$O34imibhnJCz$zXnG/ntYXbaxLrM6M0e+MiylDUjZzXnnFxDgcXmj34o="
         }
-    }
+    },
+    {
+        "model": "sites.site",
+        "pk": 2,
+        "fields": {
+          "domain": "127.0.0.1:8000",
+          "name": ""
+        }
+      }
 ]
