@@ -27,6 +27,7 @@ def get_list_of_users():
     users = client.api_call("users.list")
     if users.get('ok'):
         return users['members']
+    raise Exception()
 
 def save_users_info(today_menu):
     """ Save users data in Employee and set is_active if there are part of user list in slack """
@@ -50,10 +51,13 @@ def save_users_info(today_menu):
 
 def send_message_to_user(response_msg,user_id):
     """ send message to a specific user and message in slack """
-
-    client.chat_postMessage(
+    try:
+        client.chat_postMessage(
                         channel=user_id,
                         text=response_msg
                     )
+    except:
+        raise Exception()
+
 
 

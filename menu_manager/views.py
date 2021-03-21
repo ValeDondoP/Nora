@@ -172,7 +172,7 @@ class TodayMenuView(
         context = super().get_context_data(**kwargs)
         hour = timezone.localtime(timezone.now()).hour
         minutes = timezone.localtime(timezone.now()).minute
-        print(hour)
+
         # menu available until 11
         if hour < 11  and hour >= 8:
             context['is_active'] = True
