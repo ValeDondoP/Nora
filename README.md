@@ -20,7 +20,7 @@
 ### Cargue data inicial
 * `./manage.py loaddata fixtures.json`
 * `./manage.py loaddata fixtures_menu.json`
-
+### Slack bot
 Debe tener una app en un Workspace en Slack y un bot con los permisos:
 * chat:write
 * users:read
@@ -33,7 +33,7 @@ Además debe generar un archivo `.env` en el directorio raíz del proyecto con l
 BOT_USER_ACCESS_TOKEN=xxxxxx-xxxxxx-xxxxxxx
 ```
 ### Celery
-Para este proyecto se seteó la hora de envió del recordatorio todos los días a las 8:30 am CLT
+Para este proyecto se seteó la hora de envió del recordatorio todos los días a las 8:30 am hora de santiago de chile
 
 ```
 CELERYBEAT_SCHEDULE = {
