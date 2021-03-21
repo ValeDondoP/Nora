@@ -34,11 +34,15 @@ def save_users_info(today_menu):
     if users:
         for user in users:
             if 'email' in user['profile']:
-                employee, created = Employee.objects.update_or_create(user_id=user['id'],
+                employee, created = Employee.objects.update_or_create(
+                                        user_id=user['id'],
                                         name=user['profile']['real_name'],
                                         email=user['profile']['email'],
-                                        is_active=True,
-                                        )
+                )
+                if employee:
+                    employee.is_active=True
+                    employee.save()
+
                 Answer.objects.get_or_create(menu=today_menu,employee=employee)
 
 

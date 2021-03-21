@@ -78,7 +78,7 @@ class MenuCreateView(
         LoginRequiredMixin,
         CreateView,
     ):
-     """Menu Creation View
+    """Menu Creation View
     Display a forms to create a menu with start_date and options to choose
     """
     template_name = 'web/create_menu.html'
@@ -137,6 +137,7 @@ class TodayMenuView(
         context = super().get_context_data(**kwargs)
         hour = timezone.localtime(timezone.now()).hour
         minutes = timezone.localtime(timezone.now()).minute
+        print(hour)
         # menu available until 11
         if hour < 11  and hour >= 8:
             context['is_active'] = True

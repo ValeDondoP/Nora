@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     "bootstrap4",
     "bootstrap_datepicker_plus",
 ]
-SITE_ID = 1
+SITE_ID = 2
 
 MIDDLEWARE = [
     "backend_test.middleware.HealthCheckAwareSessionMiddleware",

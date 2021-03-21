@@ -44,7 +44,7 @@ def send_message_to_users():
             # Send message to active users
             if employee.is_active:
                 answer = Answer.objects.filter(menu=today_menu,employee=employee).first()
-                url = f'https://{current_site.domain}/menu/{answer.pk}'
+                url = f'http://{current_site.domain}/menu/{answer.pk}'
                 message = ":wave:, Hola  en este link podrás encontrar el menu de hoy " + url
                 send_message_to_user(message,employee.user_id)
             # desactivate user

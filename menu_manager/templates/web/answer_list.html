@@ -14,7 +14,7 @@
                     <div class="table-responsive ">
                         <table id="entriesTable" class="table card-table css-serial table-bordered">
                             <thead class="thead-light">
-                                <tr> <th>#</th>
+                                <tr>
                                     <th class="text-align-right">Nombre de Empleado</th>
                                     <th class="text-align-right">Opción</th>
                                     <th class="text-align-right">Comentario</th>
@@ -23,12 +23,16 @@
                             </thead>
                             <tbody>
                                 {% for answer in object_list %}
-                                <tr> <td></td>
+                                <tr>
                                     <td class="text-nowrap text-align-right">{{ answer.employee.name }}</td>
                                     <td class="text-nowrap text-align-right">
                                         {{ answer.menu_option.meal }}
                                 </td>
+                                    {% if answer.comentaries%}
                                     <td class="text-nowrap text-align-right">{{ answer.comentaries }}</td>
+                                    {% else %}
+                                    <td class="text-nowrap text-align-right"></td>
+                                    {% endif %}
                                     <td class="text-nowrap text-align-right">{{ answer.employee.email }}</td>
 
                                 </tr>
