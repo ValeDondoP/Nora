@@ -44,3 +44,8 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(minute=30,hour=8)
     },
 ```
+Para ejecutar celery:
+```
+celery -A backend_test worker --beat --scheduler django --loglevel=info
+```
+Se debe crear un Menu para hoy para eso se debe logear y crear primero opciones de almuerzo y luego crear un Menu.
