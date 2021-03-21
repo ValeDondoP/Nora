@@ -17,26 +17,26 @@
 
 * Local: http://127.0.0.1:8000
 
-### Cargue data inicial
+### Load initial data
 * `./manage.py loaddata fixtures.json`
 * `./manage.py loaddata fixtures_menu.json`
 ### Login
-* Para loguearte a la plataforma debes usar username=nora y password=cornershoptest
+* To login to the platform you must use username=nora and password=cornershoptest
 ### Slack bot
-Debe tener una app en un Workspace en Slack y un bot con los permisos:
+You must have an app in a Workspace in Slack and a bot with the permissions:
 * chat:write
 * users:read
 * users:read.email
 * incoming-webhook
 
-Además debe generar un archivo `.env` en el directorio raíz del proyecto con la siguientes variable obligatoria que corresponde a  OAuth Tokens del bot.
+In addition, you must generate a `.env` file in the backend_test directory of the project with the following obligatory variable that corresponds to the bot's OAuth Tokens.
 
 ```
 BOT_USER_ACCESS_TOKEN=xxxxxx-xxxxxx-xxxxxxx
 ```
 ### Celery
-Para este proyecto se seteó la hora de envió del recordatorio todos los días a las 8:30 am hora de santiago de chile
 
+For this project, the time to send the reminder was set every day at 8:30 am Santiago de Chile time
 ```
 CELERYBEAT_SCHEDULE = {
     'daily-reminder-menu': {
@@ -44,8 +44,10 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(minute=30,hour=8)
     },
 ```
-Para ejecutar celery:
+
+To run celery
 ```
 celery -A backend_test worker --beat --scheduler django --loglevel=info
 ```
-Se debe crear un Menu para hoy para eso se debe logear y crear primero opciones de almuerzo y luego crear un Menu.
+
+You must create a Menu for today, for that you must first log in and create lunch options and then create a Menu.
