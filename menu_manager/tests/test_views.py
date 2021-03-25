@@ -4,7 +4,7 @@ from datetime import date
 from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
 from django.utils import timezone
-
+from datetime import datetime, timedelta
 from menu_manager.models import (
     Menu,
     Option,
@@ -14,8 +14,7 @@ from menu_manager.models import (
 
 
 class TestViews(TestCase):
-    fixtures = ['fixtures.json',"fixtures_menu.json"]
-
+    fixtures = ['fixtures.json','fixtures_menu.json']
 
     def setUp(self):
         self.client = Client()
@@ -25,6 +24,7 @@ class TestViews(TestCase):
         menu = Menu.objects.first()
         self.answer = answer
         self.menu = menu
+        self.date = timezone.now().date() + timedelta(days=1)
 
     def test_menu_create_POST(self):
         """test to check if can create menu in MenuCreateView"""
@@ -32,14 +32,23 @@ class TestViews(TestCase):
         url = self.menu_url
         option = Option.objects.create(meal="arroz con pescado")
         response = self.client.post(url,{
-            'start_date': '2021-03-12',
+            'start_date':self.date ,
             'options' : [option.pk],
         })
         menu = Menu.objects.get(options=option)
-        self.assertEquals(Menu.objects.all().count(),2)
-        self.assertEquals(menu.options.first(),option)
-        start_date = date.fromisoformat('2021-03-12')
-        self.assertEquals(menu.start_date,start_date)
+        self.assertEqual(Menu.objects.all().count(),2)
+        self.assertEqual(menu.options.first(),option)
+        self.assertEqual(menu.start_date,self.date)
+
+    def test_menu_create_POST_without_options(self):
+        """test to check if can create menu in MenuCreateView without options"""
+
+        url = self.menu_url
+        response = self.client.post(url,{
+            'start_date': '2021-03-12',
+            'options' : [],
+        })
+        self.assertEqual(response.status_code, 200)
 
     def test_menu_list_view(self):
         """ test to check  MenuListView object_list"""
@@ -58,17 +67,15 @@ class TestViews(TestCase):
             { 'start_date': '2022-03-12',
               'options': [self.menu.options.first().pk]
         })
-        start_date = date.fromisoformat('2022-03-12')
-        menu = Menu.objects.get(start_date=start_date)
-        self.assertEquals(response.status_code, 302)
-        self.assertEquals(menu.start_date,start_date)
+        # this menu is already sent
+        self.assertEqual(response.status_code, 403)
 
-    def test_delte_menu_view(self):
+    def test_delete_menu_view(self):
         """ test to check if can delete menu in MenuDeleteView"""
 
         response = self.client.get(reverse('menu_manager:delete_menu',args=[self.menu.pk]))
-        self.assertEquals(response.status_code, 302)
-        self.assertEquals(0,Menu.objects.all().count()) # there was one menu in database
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(0,Menu.objects.all().count()) # there was one menu in database
 
     def test_option_create_view(self):
         """ test if can create option in OptionMenuCreateView """
@@ -84,8 +91,8 @@ class TestViews(TestCase):
               # Second meal data
               'form-1-meal': 'sushi',
         })
-        self.assertEquals(response.status_code, 302)
-        self.assertEquals(Option.objects.all().count(),4) # 2 initial options in fixtures_menu.json
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Option.objects.all().count(),4) # 2 initial options in fixtures_menu.json
 
     def test_today_menu_context(self):
         """ test to check is_active key in context_data  in TodayMenuView """

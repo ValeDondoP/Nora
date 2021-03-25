@@ -1,45 +1,44 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from menu_manager.views import * # TODO: write specific urls
-
+from menu_manager.views import *
 
 class TestUrls(SimpleTestCase):
 
     def test_index_url_is_resolved(self):
         url = reverse('menu_manager:index')
-        self.assertEquals(resolve(url).func.view_class,IndexView)
+        self.assertEqual(resolve(url).func.view_class,IndexView)
 
     def test_option_list_url_is_resolved(self):
         url = reverse('menu_manager:option_list')
-        self.assertEquals(resolve(url).func.view_class,OptionListView)
+        self.assertEqual(resolve(url).func.view_class,OptionListView)
 
     def test_create_option_url_is_resolved(self):
         url = reverse('menu_manager:create_option')
-        self.assertEquals(resolve(url).func.view_class,OptionMenuCreateView)
+        self.assertEqual(resolve(url).func.view_class,OptionMenuCreateView)
 
     def test_create_menu_url_is_resolved(self):
         url = reverse('menu_manager:create_menu')
-        self.assertEquals(resolve(url).func.view_class,MenuCreateView)
+        self.assertEqual(resolve(url).func.view_class,MenuCreateView)
 
     def test_update_menu_url_is_resolved(self):
         url = reverse('menu_manager:update_menu',args=['48a62b68-88c6-11eb-8dcd-0242ac130003'])
-        self.assertEquals(resolve(url).func.view_class,MenuUpdateView)
+        self.assertEqual(resolve(url).func.view_class,MenuUpdateView)
 
     def test_menu_list_url_is_resolved(self):
         url = reverse('menu_manager:menu_list')
-        self.assertEquals(resolve(url).func.view_class,MenuListView)
+        self.assertEqual(resolve(url).func.view_class,MenuListView)
 
     def test_today_menu_list_url_is_resolved(self):
         url = reverse('menu_manager:today_menu',args=['48a62b68-88c6-11eb-8dcd-0242ac130003'])
-        self.assertEquals(resolve(url).func.view_class,TodayMenuView)
+        self.assertEqual(resolve(url).func.view_class,TodayMenuView)
 
     def test_results_url_is_resolved(self):
         url = reverse('menu_manager:results',args=['48a62b68-88c6-11eb-8dcd-0242ac130003'])
-        self.assertEquals(resolve(url).func.view_class,AnswerListView)
+        self.assertEqual(resolve(url).func.view_class,AnswerListView)
 
     def test_answer_url_is_resolved(self):
         url = reverse('menu_manager:done')
-        self.assertEquals(resolve(url).func.view_class,AnswerDone)
+        self.assertEqual(resolve(url).func.view_class,AnswerDone)
 
 
 

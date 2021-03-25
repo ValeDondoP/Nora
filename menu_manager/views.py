@@ -6,11 +6,14 @@ from django.views.generic import ListView
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.utils import timezone
-from django.http import HttpResponseRedirect
+from django.http import (
+    HttpResponseRedirect,
+    HttpResponseForbidden,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-
-
+from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 from django.conf import settings
 
@@ -116,9 +119,12 @@ class MenuUpdateView(
         )
 
     def form_valid(self, form):
-        form.save()
-        return super(MenuUpdateView, self).form_valid(form)
-
+        menu = self.get_object()
+        if not menu.is_sent:
+            form.save()
+            return super(MenuUpdateView, self).form_valid(form)
+        else:
+            raise PermissionDenied('No se puede actualizar menu enviado')
 
 class MenuDeleteView(
         LoginRequiredMixin,
@@ -144,7 +150,6 @@ class MenuDeleteView(
         success_url = self.get_success_url()
         self.object.delete()
         return HttpResponseRedirect(success_url) #redirect
-
 
 class MenuListView(
         LoginRequiredMixin,
