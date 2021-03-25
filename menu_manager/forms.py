@@ -61,11 +61,12 @@ class MenuForm(ModelForm):
 
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean(*args, **kwargs)
-        start_date = cleaned_data["start_date"]
-        today = timezone.now().date()
-        if start_date and  start_date < today:
-            msg = 'No es posible agendar menus antes del día de hoy'
-            self.add_error('start_date', msg)
+        if 'start_date' in cleaned_data:
+            start_date =  cleaned_data['start_date']
+            today = timezone.now().date()
+            if start_date and  start_date < today:
+                msg = 'No es posible agendar menus antes del día de hoy'
+                self.add_error('start_date', msg)
         return self.cleaned_data
 
 
@@ -100,11 +101,12 @@ class MenuFormUpdate(ModelForm):
 
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean(*args, **kwargs)
-        start_date = cleaned_data["start_date"]
-        today = timezone.now().date()
-        if start_date and  start_date <= today:
-            msg = 'No es posible agendar menus antes del día de hoy'
-            self.add_error('start_date', msg)
+        if 'start_date' in cleaned_data:
+            start_date =  cleaned_data['start_date']
+            today = timezone.now().date()
+            if start_date and  start_date < today:
+                msg = 'No es posible agendar menus antes del día de hoy'
+                self.add_error('start_date', msg)
         return self.cleaned_data
 
 

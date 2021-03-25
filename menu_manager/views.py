@@ -148,8 +148,11 @@ class MenuDeleteView(
     def get(self, request, *args, **kwargs):
         self.object = self.get_object() # get object
         success_url = self.get_success_url()
-        self.object.delete()
-        return HttpResponseRedirect(success_url) #redirect
+        if not self.object.is_sent:
+            self.object.delete()
+            return HttpResponseRedirect(success_url) #redirect
+        else:
+            raise PermissionDenied('No se puede borrar menu enviado')
 
 class MenuListView(
         LoginRequiredMixin,
@@ -181,7 +184,7 @@ class TodayMenuView(
         # menu available until 11
         if hour < 11  and hour >= 8:
             context['is_active'] = True
-        elif hour == 11 and minute == 0:
+        elif hour == 11 and minutes == 0:
             context['is_active'] = True
         return context
 
