@@ -17,6 +17,9 @@ class UUIDPrimaryKey(models.Model):
 
 
 class Option(UUIDPrimaryKey):
+    """
+    Model that represents the options of a menu
+    """
     meal = models.CharField(
         max_length=64,
     )
@@ -43,6 +46,9 @@ class  Menu(UUIDPrimaryKey):
 
 
 class Employee(UUIDPrimaryKey):
+    """
+    Model that represents the employees in the slack workspace
+    """
     user_id = models.CharField(
         max_length=80,
         blank=True,
@@ -70,6 +76,10 @@ class Employee(UUIDPrimaryKey):
 
 
 class  Answer(UUIDPrimaryKey):
+    """
+    Model that represents the answer that saves the option
+    that the employee sent
+    """
     menu = models.ForeignKey(
         Menu,
         on_delete=models.CASCADE,

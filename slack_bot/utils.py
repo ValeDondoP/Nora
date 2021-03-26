@@ -47,6 +47,7 @@ def save_users_info(today_menu):
                     employee.is_active=True
                     employee.save()
 
+                # create or get the answer for the employee
                 Answer.objects.get_or_create(menu=today_menu,employee=employee)
 
 def send_message_to_user(response_msg,user_id):
