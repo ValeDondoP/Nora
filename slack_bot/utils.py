@@ -1,16 +1,12 @@
-import logging
-import os
-import datetime
-import requests
 import slack
 
 from django.conf import settings
-from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.dateparse import parse_datetime
 
 from dateutil.relativedelta import relativedelta
+
+from slack_bot.mockup import get_client
 
 from menu_manager.models import (
     Menu,
@@ -18,8 +14,8 @@ from menu_manager.models import (
     Employee
 )
 
+client  = get_client()
 
-client  = slack.WebClient(token=settings.BOT_USER_ACCESS_TOKEN)
 
 def get_list_of_users():
     """Requests list of member of a slack workspace """

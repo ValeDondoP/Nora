@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
+import sys
 
 from .envtools import getenv
 from celery.schedules import crontab
@@ -21,6 +22,9 @@ from celery.schedules import crontab
 
 env = environ.Env()
 environ.Env.read_env()
+
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.utils import timezone
 from slack_bot.utils import get_list_of_users, save_users_info, send_message_to_user
 from slack_bot.tasks import send_message_to_users
+from django.test.utils import override_settings
+from django.conf import settings
 from menu_manager.models import (
     Menu,
     Option,
@@ -24,9 +26,11 @@ class TestUtilsAndTasks(TestCase):
     def test_save_users_info(self):
         """ Test function save_users_info """
 
-        save_users_info(self.today_menu) # should not call the api, but I dont know how to mock the api
+        save_users_info(self.today_menu) # this call fake api
 
         self.assertIsNotNone(Employee.objects.first())
+        self.assertIsNotNone(Answer.objects.first())
+
         number_of_employees = Employee.objects.all().count()
 
         # if I call the function again it should not change the employees in datatabase
@@ -36,7 +40,7 @@ class TestUtilsAndTasks(TestCase):
     def test_send_message_to_users(self):
         """ Test function send_message_to_users """
 
-        send_message_to_users() # should not call the api, but I dont know how to mock the api
+        send_message_to_users() # this call mocked api
 
         answer = Answer.objects.first()
         # Check that the menu is sent
