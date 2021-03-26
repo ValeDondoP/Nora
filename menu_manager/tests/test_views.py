@@ -192,7 +192,7 @@ class TestViews(TestCase):
                                  transform=lambda x: x)
 
     def test_answer_employee_list_view_with_valid_user(self):
-        """ Tests to check if I login can enter to see answer list of a specific menu"""
+        """ Tests to check if I login I can enter to see answer list for a specific menu """
 
         response = self.client.get(reverse('menu_manager:results',args=[self.menu.pk]))
 
@@ -200,7 +200,7 @@ class TestViews(TestCase):
         self.assertEqual(response.template_name[0], 'web/answer_list.html')
 
     def test_answer_employee_list_view_with_anonymous_user(self):
-        """ Tests if anonymus o not registered user can see the answer list of a specific menu"""
+        """ Tests if anonymus o not registered user can see the answer list for a specific menu """
 
         # Log out
         self.client.logout()

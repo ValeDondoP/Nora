@@ -13,7 +13,11 @@ class OptionModelTest(TestCase):
 
 
     def test_it_has_information_fields(self):
+        """ Test if the field has the information """
+
         self.assertIsInstance(self.option.meal, str)
 
     def test_model_str_method(self):
+        """ Test if the str method of Option model return the correct string """
+
         self.assertEqual(str(self.option), "cerdo con arroz, ensalada y postre")
