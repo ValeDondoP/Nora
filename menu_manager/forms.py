@@ -133,3 +133,12 @@ class AnswerForm(forms.ModelForm):
         self.fields['menu_option'] = forms.ModelChoiceField(
                                             queryset=answer.menu.options.all(),
                                       )
+
+    def clean(self, *args, **kwargs):
+        cleaned_data = super().clean(*args, **kwargs)
+        if 'employee' in cleaned_data:
+            employee =  cleaned_data['employee']
+            if employee != self.instance.employee :
+                msg = 'No es posible agendar respuesta'
+                self.add_error('employee', msg)
+        return self.cleaned_data

@@ -25,6 +25,7 @@ class TestViews(TestCase):
         self.past_menu = Menu.objects.first()
         self.date = timezone.now().date() + timedelta(days=1)
 
+        # Create menu with future start_date to test valid update and delete form
         current_menu = Menu.objects.create(start_date=self.date)
         current_menu.options.add(self.option)
         current_menu.save()
@@ -35,36 +36,46 @@ class TestViews(TestCase):
 
 
     def test_menu_create_POST(self):
-        """test to check if can create menu in MenuCreateView"""
+        """ Test to check if can create menu in MenuCreateView """
 
         url = self.menu_url
         option = Option.objects.create(meal='arroz con pescado')
         response = self.client.post(url, {'start_date': self.date
                                     + timedelta(days=1),
                                     'options': [option.pk]})
+
+        # check menu created
         menu = Menu.objects.get(options=option)
         self.assertEqual(Menu.objects.all().count(), 3)
         self.assertEqual(menu.options.first(), option)
         self.assertEqual(menu.start_date, self.date + timedelta(days=1))
 
     def test_menu_create_POST_without_options(self):
-        """test to check if can create menu in MenuCreateView without options"""
+        """ Test to check if can create menu in MenuCreateView without options """
 
         url = self.menu_url
-        response = self.client.post(url, {'start_date': self.date,
+        response = self.client.post(url, {'start_date': self.date + timedelta(days=2),
                                     'options': []})
         self.assertEqual(response.status_code, 200)
 
+        # check that the menu was not created
+        is_menu_created = Menu.objects.filter(start_date=self.date + timedelta(days=2)).exists()
+        self.assertFalse(is_menu_created)
+
     def test_menu_create_POST_without_date(self):
-        """test to check if can create menu in MenuCreateView without options"""
+        """ Test to check if can create menu in MenuCreateView without start_date """
 
         url = self.menu_url
-        response = self.client.post(url, {'start_date': '',
+        response = self.client.post(url,
+                                    {'start_date': '',
                                     'options': self.option})
+
+        # does not redirect to success url
         self.assertEqual(response.status_code, 200)
 
+
     def test_menu_create_POST_with_menu_date_taken(self):
-        """test to check if can create menu in MenuCreateView with a date already taken by other menu"""
+        """ Test to check if can create menu in MenuCreateView with a date already taken by other menu """
 
         url = self.menu_url
         response = self.client.post(url,
@@ -72,8 +83,12 @@ class TestViews(TestCase):
                                     'options': [self.option.pk]})
         self.assertEqual(response.status_code, 200)
 
+        # check if the menu was created
+        number_of_menus = Menu.objects.filter(start_date=self.past_menu.start_date).count()
+        self.assertEqual(number_of_menus,1)
+
     def test_menu_list_view(self):
-        """ test to check  MenuListView object_list"""
+        """ Test to check  MenuListView object_list """
 
         response = self.client.get(reverse('menu_manager:menu_list'))
         self.assertEqual(response.status_code, 200)
@@ -81,28 +96,27 @@ class TestViews(TestCase):
         self.assertTrue(len(response.context['object_list'])
                         == Menu.objects.all().count())
 
-    def test_cannot_update_menu_view(self):
-        """ test to check if can not update menu in MenuUpdateView because the menu is sent"""
+    def test_update_menu_view_fails(self):
+        """ Test to check if can not update menu in MenuUpdateView because the menu is sent """
 
         response = self.client.post(reverse('menu_manager:update_menu',
                                     args=[self.past_menu.pk]),
-                                    {'start_date': '2022-03-12',
+                                    {'start_date': self.date + timedelta(days=2), # update start_date
                                     'options': [self.menu.options.first().pk]})
 
-        # this menu is already sent
-
+        # this menu is already sent therefore it should return 403
         self.assertEqual(response.status_code, 403)
 
     def test_delete_menu_view(self):
-        """ test to check if can delete menu in MenuDeleteView"""
+        """ Test to check if can delete menu in MenuDeleteView """
 
         response = self.client.get(reverse('menu_manager:delete_menu',
                                    args=[self.menu.pk]))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(1, Menu.objects.all().count())  # there was one menu in database
+        self.assertEqual(1, Menu.objects.all().count())  # there were 2 menus originally
 
     def test_delete_menu_view_with_sent_menu(self):
-        """ test to check if can delete menu in MenuDeleteView"""
+        """ Test to check if can delete menu in MenuDeleteView """
 
         response = self.client.get(reverse('menu_manager:delete_menu',
                                    args=[self.past_menu.pk]))
@@ -110,7 +124,7 @@ class TestViews(TestCase):
         self.assertEqual(2, Menu.objects.all().count()) # there are two menus in database and no one is deleted
 
     def test_option_create_view(self):
-        """ test if can create option in OptionMenuCreateView """
+        """ Test if can create option in OptionMenuCreateView """
 
         response = self.client.post(reverse('menu_manager:create_option'
                                     ),
@@ -126,7 +140,7 @@ class TestViews(TestCase):
         self.assertEqual(Option.objects.all().count(), 4)  # 2 initial options in fixtures_menu.json
 
     def test_invalid_option_create_view(self):
-        """ test if can create option in OptionMenuCreateView """
+        """ Test if can create option in OptionMenuCreateView """
 
         response = self.client.post(reverse('menu_manager:create_option'
                                     ), {
@@ -140,7 +154,8 @@ class TestViews(TestCase):
         self.assertEqual(Option.objects.all().count(), 2)
 
     def test_today_menu_context(self):
-        """ test to check is_active key in context_data  in TodayMenuView """
+        """ Test to check is_active key in context_data  in TodayMenuView """
+
         # can see without login
         self.client.logout()
         response = self.client.get(reverse('menu_manager:today_menu',
@@ -161,7 +176,7 @@ class TestViews(TestCase):
             self.assertContains(response,'Lo siento! el menu expiró :( ')
 
     def test_answer_list_view_context(self):
-        """ test to check menu key in context_data in AnswerListView """
+        """ Test to check menu key in context_data in AnswerListView """
 
         response = self.client.get(reverse('menu_manager:results',
                                    args=[self.menu.pk]))
@@ -186,12 +201,15 @@ class TestViews(TestCase):
 
     def test_answer_employee_list_view_with_anonymous_user(self):
         """ Tests if anonymus o not registered user can see the answer list of a specific menu"""
+
         # Log out
         self.client.logout()
         response = self.client.get(reverse('menu_manager:results',args=[self.menu.pk]))
+
         # redirect to login
         self.assertEqual(response.status_code,302)
         self.assertRedirects(response, f'/accounts/login/?next=/results/{self.menu.pk}')
+
         # try to login with diferent user
         self.client.login(username="vale", password="cornershoptest")
         response = self.client.get(reverse('menu_manager:results',args=[self.menu.pk]))

@@ -88,8 +88,6 @@ class  Answer(UUIDPrimaryKey):
         Employee,
         on_delete=models.CASCADE,
         related_name='answers',
-        blank=True,
-        null=True,
     )
 
     comentaries = models.CharField(

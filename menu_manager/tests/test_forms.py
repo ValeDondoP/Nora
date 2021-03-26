@@ -25,6 +25,7 @@ class TestForms(TestCase):
     def test_valid_menu_form(self):
         """ test to check if menu form is valid """
 
+        # set start_date with a date not used before
         data = {'start_date': self.date + timedelta(days=1),
                 'options': [self.option.pk]}
         form = MenuForm(data=data)
@@ -54,7 +55,7 @@ class TestForms(TestCase):
         form = MenuForm(data=data)
         self.assertFalse(form.is_valid())
 
-        # create a menu with a start_date as number
+        # create a menu with a start_date empty
 
         data.update({'start_date': ''})
         form = MenuForm(data=data)
@@ -64,6 +65,7 @@ class TestForms(TestCase):
         """ test to check if menu update form is valid """
 
         option = Option.objects.last()
+        # update menu with other option
         valid_data = {
             'start_date': self.menu.start_date,
             'options': [option.pk]
@@ -94,6 +96,7 @@ class TestForms(TestCase):
         valid_data = {
             'menu': self.answer.menu.pk,
             'menu_option': self.answer.menu_option.pk,
+            'employee': self.answer.employee.pk,
             'comentaries': 'ensalada sin tomate'
         }
         form = AnswerForm(instance=self.answer, data=valid_data)
@@ -112,6 +115,7 @@ class TestForms(TestCase):
         form = AnswerForm(instance=self.answer,
                           data={'menu': self.answer.menu.pk,
                           'menu_option': '',
+                          'employee': self.answer.employee.pk,
                           'comentaries': 'ensalada sin tomate'})
 
         self.assertFalse(form.is_valid())
@@ -123,6 +127,13 @@ class TestForms(TestCase):
                           'comentaries': 'ensalada sin tomate'})
         self.assertFalse(form.is_valid())
 
-        #
+        # send  answer with using another employee that is not the set when answer object is created
         employee = self.answer.employee
         shammer_employee = Employee.objects.create(name='Impostor',email='impostor@mail.com')
+        form = AnswerForm(instance=self.answer,
+                          data={
+                          'menu' : self.answer.menu.pk,
+                          'menu_option': self.answer.menu_option.pk,
+                          'employee': shammer_employee.pk,
+                          'comentaries': 'ensalada sin tomate'})
+        self.assertFalse(form.is_valid())
