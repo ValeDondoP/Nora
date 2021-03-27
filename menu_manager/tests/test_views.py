@@ -71,7 +71,6 @@ class TestViews(TestCase):
                                     'options': self.option})
 
         # does not redirect to success url
-        # TODO: que hacer en este cao
         self.assertEqual(response.status_code, 200)
 
 

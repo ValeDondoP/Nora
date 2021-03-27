@@ -43,5 +43,7 @@ class TestUtilsAndTasks(TestCase):
         send_message_to_users() # this call mocked api
 
         answer = Answer.objects.first()
-        # Check that the menu is sent
-        self.assertTrue(answer.menu.is_sent)
+        menu = Menu.objects.get(pk=self.today_menu.pk)
+
+        # Check that today's menu  is sent
+        self.assertTrue(menu.is_sent)
