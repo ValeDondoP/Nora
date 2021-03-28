@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
+from datetime import datetime, timedelta
 from slack_bot.utils import get_list_of_users, save_users_info, send_message_to_user
 from slack_bot.tasks import send_message_to_users
 from django.test.utils import override_settings
@@ -16,6 +17,7 @@ class TestUtilsAndTasks(TestCase):
 
     def setUp(self):
         today = timezone.now()
+        self.today = today
         today_menu = Menu.objects.create(start_date=today)
         option = Option.objects.create(meal='cazuela, ensalada y postre')
         today_menu.options.add(option)
@@ -40,10 +42,18 @@ class TestUtilsAndTasks(TestCase):
     def test_send_message_to_users(self):
         """ Test function send_message_to_users """
 
-        send_message_to_users() # this call mocked api
+        send_message_to_users() # this call mocked api, see mockup.py
 
         answer = Answer.objects.first()
         menu = Menu.objects.get(pk=self.today_menu.pk)
 
         # Check that today's menu  is sent
         self.assertTrue(menu.is_sent)
+
+        # Change today menu's date to past date
+        menu.start_date = self.today - timedelta(days=1)
+        menu.is_sent= False
+        menu.save()
+        # There is no menu to send therefore menu.is_sent should be False
+        send_message_to_users()
+        self.assertFalse(menu.is_sent)

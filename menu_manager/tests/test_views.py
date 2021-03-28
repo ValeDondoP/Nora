@@ -116,7 +116,7 @@ class TestViews(TestCase):
         self.assertEqual(1, Menu.objects.all().count())  # there were 2 menus originally
 
     def test_delete_menu_view_with_sent_menu(self):
-        """ Test to check if can delete menu in MenuDeleteView """
+        """ Test to check if cannot a delete menu that is already sent in MenuDeleteView """
 
         response = self.client.get(reverse('menu_manager:delete_menu',
                                    args=[self.past_menu.pk]))
