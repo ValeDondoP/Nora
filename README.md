@@ -1,4 +1,4 @@
-## cornershop-backend-test
+## backend-test
 
 ### Running the development environment
 
